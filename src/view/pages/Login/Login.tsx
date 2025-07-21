@@ -19,10 +19,16 @@ export function Login() {
                 username: data.username,
                 password: data.password
             };
+            console.log(userCredentials);
             const response = await backendApi.post('api/auth/login', userCredentials);
+            console.log("down")
             const accessToken = response.data.accessToken;
             const refreshToken = response.data.refreshToken;
+            console.log(accessToken)
+            const id = response.data.id;
 
+            localStorage.setItem('userId', id);
+            console.log(id);
             localStorage.setItem('token', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             const user: UserData = getUserFromToken(accessToken);
