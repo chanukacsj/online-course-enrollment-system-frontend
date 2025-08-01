@@ -5,7 +5,7 @@ import { getUserFromToken } from "../../../auth/auth.ts";
 import type { UserData } from "../../../model/UserData.ts";
 
 type FormData = {
-    username: string;
+    email: string;
     password: string;
 };
 
@@ -16,7 +16,7 @@ export function Login() {
     const authenticateUser = async (data: FormData) => {
         try {
             const userCredentials = {
-                username: data.username,
+                email: data.email,
                 password: data.password
             };
             console.log(userCredentials);
@@ -63,14 +63,14 @@ export function Login() {
                 <form className="space-y-6" onSubmit={handleSubmit(authenticateUser)}>
                     <div>
                         <label htmlFor="username" className="block text-sm font-medium text-blue-700">
-                            Username
+                            Email
                         </label>
                         <input
-                            type="text"
-                            id="username"
-                            {...register("username")}
+                            type="email"
+                            id="email"
+                            {...register("email")}
                             className="mt-2 block w-full border border-blue-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 p-2"
-                            placeholder="Enter your username"
+                            placeholder="Enter your email"
                         />
                     </div>
 

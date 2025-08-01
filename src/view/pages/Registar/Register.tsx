@@ -43,12 +43,33 @@ export function Register() {
                         <input
                             type="text"
                             id="username"
-                            {...register("username", { required: true })}
+                            {...register("username", {required: true})}
                             className="mt-2 block w-full border border-blue-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 p-2"
                             placeholder="Enter your username"
                         />
                         {errors.username && <p className="text-red-500 text-xs mt-1">Username is required</p>}
                     </div>
+
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-blue-700">
+                            Email
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            {...register("email", {
+                                required: "Email is required",
+                                pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: "Invalid email format"
+                                }
+                            })}
+                            className="mt-2 block w-full border border-blue-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 p-2"
+                            placeholder="Enter your email"
+                        />
+                        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+                    </div>
+
 
                     {/* Password */}
                     <div>
@@ -58,7 +79,7 @@ export function Register() {
                         <input
                             type="password"
                             id="password"
-                            {...register("password", { required: true })}
+                            {...register("password", {required: true})}
                             className="mt-2 block w-full border border-blue-200 rounded-lg text-sm shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 p-2"
                             placeholder="••••••••"
                         />

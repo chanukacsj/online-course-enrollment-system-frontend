@@ -21,7 +21,7 @@ export function Navbar() {
                     <Link to="/">Home</Link>
                 </li>
                 <li className="text-lg text-blue-800 font-semibold px-3 hover:text-blue-600 transition-colors duration-200">
-                    <Link to="/about">Courses</Link>
+                    <Link to="/enrollmentCourse">Enrollment Courses</Link>
                 </li>
                 <li className="text-lg text-blue-800 font-semibold px-3 hover:text-blue-600 transition-colors duration-200">
                     <Link to="/contact">Contact</Link>
