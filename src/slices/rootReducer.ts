@@ -1,10 +1,12 @@
 import {combineReducers} from "redux";
 import courseReducer from "./courseSlice.ts";
 import enrollmentReducer from "./courseEnrollmentSlice.ts";
+import userReducer from "./usersSlice.ts";
 
 export const rootReducer = combineReducers({
     course: courseReducer,
-    enrollmentCollection: enrollmentReducer
+    enrollmentCollection: enrollmentReducer,
+    users: userReducer
 
 });
 export type RootReducerState = ReturnType<typeof rootReducer>

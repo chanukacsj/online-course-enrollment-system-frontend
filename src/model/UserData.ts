@@ -1,4 +1,6 @@
 export interface UserData {
-    username: string | null;
-    role: string | null;
+    id: number;
+    email: string;
+    username: string;
+    role: string;
 }

@@ -26,9 +26,16 @@ export function Login() {
             const refreshToken = response.data.refreshToken;
             console.log(accessToken)
             const id = response.data.id;
+            const role = response.data.role;
+            const username = response.data.username;
 
             localStorage.setItem('userId', id);
-            console.log(id);
+            localStorage.setItem('role', role);
+            localStorage.setItem('username', username);
+            console.log("User ID:", id);
+            console.log("Role:", role);
+            console.log("Username:", username);
+            //console.log(id);
             localStorage.setItem('token', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             const user: UserData = getUserFromToken(accessToken);

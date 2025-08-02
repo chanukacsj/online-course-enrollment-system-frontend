@@ -9,7 +9,7 @@ export function MainContent() {
         <div className="flex justify-center
                        items-center min-h-screen">
             <Routes>
-                <Route path="/" element={<Home />}/>
+                <Route path="/" element={<Home/>}/>
                 <Route path="/contact" element={<Contact />}/>
                 <Route path="/enrollmentCourse" element={<EnrollmentCoursePage/>} />
             </Routes>
