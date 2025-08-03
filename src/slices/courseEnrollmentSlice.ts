@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { backendApi } from "../api";
-import type { EnrollmentsCollectionData } from "../model/EnrollmentCollectionData";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {backendApi} from "../api";
+import type {EnrollmentsCollectionData} from "../model/EnrollmentCollectionData";
 
 interface EnrollmentState {
     list: EnrollmentsCollectionData[];
@@ -23,6 +23,8 @@ export const getEnrollmentsByUserId = createAsyncThunk(
     }
 );
 
+
+
 const enrollmentSlice = createSlice({
     name: "EnrollmentsCollection",
     initialState,
@@ -44,5 +46,6 @@ const enrollmentSlice = createSlice({
             });
     },
 });
+
 
 export default enrollmentSlice.reducer;
