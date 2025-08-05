@@ -75,7 +75,9 @@ export function AdminCoursesPage() {
                                 description: "",
                                 price: 0,
                                 currency: "LKR",
-                                image: ""
+                                image: "",
+                                course_start_date: "",
+                                course_end_date: ""
                             });
                             setIsCreating(true);
                         }}
@@ -92,6 +94,8 @@ export function AdminCoursesPage() {
                                 <th className="py-3 px-4 text-left text-blue-900 font-semibold">ID</th>
                                 <th className="py-3 px-4 text-left text-blue-900 font-semibold">Name</th>
                                 <th className="py-3 px-4 text-left text-blue-900 font-semibold">Description</th>
+                                <th className="py-3 px-4 text-left text-blue-900 font-semibold">Start Date</th>
+                                <th className="py-3 px-4 text-left text-blue-900 font-semibold">End Date</th>
                                 <th className="py-3 px-4 text-left text-blue-900 font-semibold">Price</th>
                                 <th className="py-3 px-4 text-center text-blue-900 font-semibold">Actions</th>
                             </tr>
@@ -102,6 +106,8 @@ export function AdminCoursesPage() {
                                     <td className="py-3 px-4">{course.id}</td>
                                     <td className="py-3 px-4">{course.name}</td>
                                     <td className="py-3 px-4">{course.description}</td>
+                                    <td className="py-3 px-4">{course.course_start_date}</td>
+                                    <td className="py-3 px-4">{course.course_end_date}</td>
                                     <td className="py-3 px-4">{course.price}</td>
                                     <td className="py-3 px-4 text-center space-x-2">
                                         <button
@@ -154,6 +160,31 @@ export function AdminCoursesPage() {
                                 onChange={(e) => setEditingCourse({...editingCourse, price: Number(e.target.value)})}
                                 className="w-full p-2 border border-gray-300 rounded mb-4"
                             />
+                            <label className="block mb-2">Start Date:</label>
+                            <input
+                                type="date"
+                                value={editingCourse.course_start_date || ""}
+                                onChange={(e) =>
+                                    setEditingCourse({
+                                        ...editingCourse,
+                                        course_start_date: e.target.value,
+                                    })
+                                }
+                                className="w-full p-2 border border-gray-300 rounded mb-4"
+                            />
+                            <label className="block mb-2">End Date:</label>
+                            <input
+                                type="date"
+                                value={editingCourse.course_end_date || ""}
+                                onChange={(e) =>
+                                    setEditingCourse({
+                                        ...editingCourse,
+                                        course_end_date: e.target.value,
+                                    })
+                                }
+                                className="w-full p-2 border border-gray-300 rounded mb-4"
+                            />
+
 
                             <label className="block mb-2">Image URL:</label>
                             <input

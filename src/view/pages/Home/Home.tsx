@@ -67,15 +67,28 @@ export function Home() {
     return (
         <>
             {role === "customer" && (
-                <div className="py-8 px-4">
-                    <h2 className="text-3xl font-bold text-center text-blue-800 mb-6">Available Courses</h2>
-                    <div className="flex flex-wrap justify-center gap-6">
-                        {list.map((course) => (
-                            <Course key={course.id} data={course} />
-                        ))}
+                <section className="py-12 px-6  min-h-screen">
+                    <div className="relative text-center mb-10">
+                        <h2 className="text-4xl font-extrabold text-blue-900 drop-shadow-md inline-block relative">
+                            Explore Our Courses
+                        </h2>
+                        <div className="absolute left-0 right-0 h-0.25 opacity-40 bg-black mt-4 mb-6 top-full mx-auto w-full rounded-full"></div>
                     </div>
-                </div>
+
+                    {list.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+                            {list.map((course) => (
+                                <Course key={course.id} data={course} />
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-center text-gray-500 text-lg mt-10">
+                            No courses available at the moment.
+                        </p>
+                    )}
+                </section>
             )}
+
 
             {role === "admin" && (
                 <div className="max-w-6xl  mx-auto mt-10 px-4">
