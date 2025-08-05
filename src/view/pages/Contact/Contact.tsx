@@ -40,9 +40,13 @@ export function Contact() {
     )
 
     return (
-        <div className="w-full h-screen flex justify-center items-center relative ">
 
-            <h1 className="absolute top-8 text-3xl font-bold text-center text-gray-800 w-full">Contact Us</h1>
+        <div className="w-full h-screen flex justify-center items-center relative ">
+            <div className="absolute top-13 text-center mb-10">
+                <h2 className="text-4xl font-extrabold text-blue-900 drop-shadow-md inline-block ">
+                    Contact Us
+                </h2>
+            </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md flex flex-col gap-4 shadow-lg rounded-lg border border-blue-300
