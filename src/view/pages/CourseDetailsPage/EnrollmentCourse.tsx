@@ -7,10 +7,7 @@ type EnrollmentCourseProps = {
     enrollment: EnrollmentsCollectionData;
     courses: CourseData[];
 };
-const images: Record<string, string> = import.meta.glob(
-    '../../../assets/course/*',
-    { eager: true, import: 'default' }
-);
+
 
 export function EnrollmentCourse({ enrollment, courses }: EnrollmentCourseProps) {
     const course = courses.find(c => c.id === enrollment.courseId);
@@ -20,10 +17,6 @@ export function EnrollmentCourse({ enrollment, courses }: EnrollmentCourseProps)
     if (!course) {
         return <div className="text-red-500">Course not found</div>;
     }
-
-    const imagePath = `../../../assets/course/${course.image}`;
-    const image = images[imagePath] ?? "/default-course.png";
-
     return (
         <div
             className="w-[16rem] m-3 flex flex-col justify-between
@@ -32,11 +25,20 @@ export function EnrollmentCourse({ enrollment, courses }: EnrollmentCourseProps)
         >
             {/* Image */}
             <div className="flex justify-center p-3">
-                <img
-                    className="h-[7rem] w-[12rem] object-cover rounded-md hover:scale-105 transition duration-300"
-                    src={image}
-                    alt={course.name}
-                />
+                {/*<img*/}
+                {/*    className="h-[7rem] w-[12rem] object-cover rounded-md hover:scale-105 transition duration-300"*/}
+                {/*    src={image}*/}
+                {/*    alt={course.name}*/}
+                {/*/>*/}
+                {course.image ? (
+                    <img
+                        src={`http://localhost:3000/uploads/course/${course.image}`}
+                        alt={course.description}
+                        className="h-[7rem] w-[12rem] object-cover rounded-md"
+                    />
+                ) : (
+                    "No photo"
+                )}
             </div>
 
             {/* Details */}

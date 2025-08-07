@@ -1,20 +1,33 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../store/store.ts";
-import { getAllCourses } from "../../../slices/courseSlice.ts";
-import { getAllUsers } from "../../../slices/usersSlice.ts";
-import { Course } from "../Course/Course.tsx";
-import type { UserData } from "../../../model/UserData.ts";
-import { backendApi } from "../../../api.ts";
+import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import type {AppDispatch, RootState} from "../../../store/store.ts";
+import {getAllCourses} from "../../../slices/courseSlice.ts";
+import {getAllUsers} from "../../../slices/usersSlice.ts";
+import {Course} from "../Course/Course.tsx";
+import type {UserData} from "../../../model/UserData.ts";
+import {backendApi} from "../../../api.ts";
 
 export function Home() {
     const dispatch = useDispatch<AppDispatch>();
-    const { list } = useSelector((state: RootState) => state.course);
-    const { list: allUsers } = useSelector((state: RootState) => state.users);
+    const {list} = useSelector((state: RootState) => state.course);
+    const {list: allUsers} = useSelector((state: RootState) => state.users);
 
     const [role, setRole] = useState<string | null>(null);
     const [users, setUsers] = useState<UserData[]>([]);
     const [editingUser, setEditingUser] = useState<UserData | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchUser, setSearchUser] = useState("");
+
+    const filteredUsers = users.filter((user) =>
+        user.username.toLowerCase().includes(searchUser.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchUser.toLowerCase())
+    );
+
+    const filteredCourses = list.filter((course) =>
+            course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            course.description.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
 
     useEffect(() => {
         dispatch(getAllCourses());
@@ -47,7 +60,7 @@ export function Home() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (editingUser) {
-            setEditingUser({ ...editingUser, [e.target.name]: e.target.value });
+            setEditingUser({...editingUser, [e.target.name]: e.target.value});
         }
     };
 
@@ -72,13 +85,30 @@ export function Home() {
                         <h2 className="text-4xl font-extrabold text-blue-900 drop-shadow-md inline-block relative">
                             Explore Our Courses
                         </h2>
-                        <div className="absolute left-0 right-0 h-0.25 opacity-40 bg-black mt-4 mb-6 top-full mx-auto w-full rounded-full"></div>
+                        <div
+                            className="absolute left-0 right-0 h-0.25 opacity-40 bg-black mt-4 mb-6 top-full mx-auto w-full rounded-full"></div>
                     </div>
-
-                    {list.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-                            {list.map((course) => (
-                                <Course key={course.id} data={course} />
+                    <div className="flex justify-center mb-8">
+                        <input
+                            type="text"
+                            placeholder="Search courses by name or description"
+                            className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    {/*{list.length > 0 ? (*/}
+                    {/*    <div*/}
+                    {/*        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">*/}
+                    {/*        {list.map((course) => (*/}
+                    {/*            <Course key={course.id} data={course}/>*/}
+                    {/*        ))}*/}
+                    {/*    </div>*/}
+                    {filteredCourses.length > 0 ? (
+                        <div
+                            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+                            {filteredCourses.map((course) => (
+                                <Course key={course.id} data={course}/>
                             ))}
                         </div>
                     ) : (
@@ -95,9 +125,20 @@ export function Home() {
                     <h1 className="text-3xl absolute top-45 left-1/2 transform -translate-x-1/2 font-bold text-blue-900 text-center mb-6">
                         Admin User Management
                     </h1>
+                    <div className="flex absolute top-65 justify-center left-1/2 transform -translate-x-1/2 mb-8">
+                        <input
+                            type="text"
+                            placeholder="Search by name or email..."
+                            value={searchUser}
+                            onChange={(e) => setSearchUser(e.target.value)}
+                            className="border border-gray-300 rounded-lg px-4 py-2 w-[600px] shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
 
-                    {users.length > 0 ? (
-                        <div className="w-[90%] max-w-6xl overflow-x-auto rounded-lg absolute top-80 left-1/2 transform -translate-x-1/2 shadow-md border border-gray-200">
+
+                    {filteredUsers.length > 0 ? (
+                        <div
+                            className="w-[90%] max-w-6xl overflow-x-auto rounded-lg absolute top-80 left-1/2 transform -translate-x-1/2 shadow-md border border-gray-200">
                             <table className="min-w-full bg-white">
                                 <thead className="bg-blue-100">
                                 <tr>
@@ -109,7 +150,7 @@ export function Home() {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {users.map((user) => (
+                                {filteredUsers.map((user) => (
                                     <tr key={user.id} className="border-t hover:bg-blue-50">
                                         <td className="py-3 px-4">{user.id}</td>
                                         <td className="py-3 px-4">{user.username}</td>

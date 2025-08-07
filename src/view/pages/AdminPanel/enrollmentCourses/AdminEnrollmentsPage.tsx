@@ -13,6 +13,8 @@ export function AdminEnrollmentsPage() {
     const {list: users} = useSelector((state: RootState) => state.users);
     const {list: courses} = useSelector((state: RootState) => state.course);
 
+   // console.log(enrollments);
+
     const [editingEnrollment, setEditingEnrollment] = useState<EnrollmentsCollectionData | null>(null);
 
     useEffect(() => {
@@ -21,9 +23,11 @@ export function AdminEnrollmentsPage() {
         dispatch(getAllUsers());
     }, [dispatch]);
 
+
+
     const handleUpdate = async (enrollment: EnrollmentsCollectionData) => {
         try {
-            const response = await backendApi.put(`/api/enrollments/update/${enrollment.id}`, enrollment);
+            const response = await backendApi.put(`/api/enrollments/update/${enrollment.enrollmentId}`, enrollment);
             alert(response.data.message || "Updated successfully");
             dispatch(getAllEnrollments());
             setEditingEnrollment(null);
@@ -33,10 +37,11 @@ export function AdminEnrollmentsPage() {
         }
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (enrollmentId: number) => {
         if (confirm("Are you sure?")) {
             try {
-                await backendApi.delete(`/api/enrollments/delete/${id}`);
+                console.log(enrollmentId);
+                await backendApi.delete(`/api/enrollments/delete/${enrollmentId}`);
                 dispatch(getAllEnrollments());
             } catch (err) {
                 alert("Delete failed");
@@ -74,8 +79,8 @@ export function AdminEnrollmentsPage() {
                     </thead>
                     <tbody>
                     {enrollments.map((enroll) => (
-                        <tr key={enroll.id} className="border-t hover:bg-blue-50">
-                            <td className="py-3 px-4">{enroll.id}</td>
+                        <tr key={enroll.enrollmentId} className="border-t hover:bg-blue-50">
+                            <td className="py-3 px-4">{enroll.enrollmentId}</td>
                             <td className="py-3 px-4">{getUserNameById(enroll.userId)}</td>
                             <td className="py-3 px-4">{getCourseNameById(enroll.courseId)}</td>
                             <td className="py-3 px-4">{new Date(enroll.enrollmentDate).toLocaleDateString()}</td>
@@ -88,7 +93,7 @@ export function AdminEnrollmentsPage() {
                                     Edit
                                 </button>
                                 <button
-                                    onClick={() => handleDelete(enroll.id)}
+                                    onClick={() => handleDelete(enroll.enrollmentId)}
                                     className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                                 >
                                     Delete
@@ -113,14 +118,13 @@ export function AdminEnrollmentsPage() {
     );
 }
 
-function Modal({title, children, onClose}: { title: string, children: React.ReactNode, onClose: () => void }) {
+function Modal({title, children}: { title: string, children: React.ReactNode, onClose: () => void }) {
     return (
         <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg">
                 <h2 className="text-xl font-bold mb-4 text-blue-700">{title}</h2>
                 {children}
                 <div className="mt-4 text-right">
-                    <button onClick={onClose} className="text-sm text-gray-600 hover:underline">Close</button>
                 </div>
             </div>
         </div>
@@ -146,8 +150,8 @@ function EnrollmentForm({
                 onChange={(e) => setForm({...form, status: e.target.value})}
                 className="w-full mb-3 border p-2 rounded"
             >
-                <option value="active">Active</option>
                 <option value="cancelled">Cancelled</option>
+                <option value="active">Active</option>
                 <option value="completed">Completed</option>
             </select>
 

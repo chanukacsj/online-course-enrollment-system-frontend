@@ -6,16 +6,16 @@ type CourseProps = {
     data: CourseData;
 };
 
-const images: Record<string, string> = import.meta.glob(
-    '../../../assets/course/*',
-    { eager: true, import: 'default' }
-);
+// const images: Record<string, string> = import.meta.glob(
+//     '../../../assets/course/*',
+//     { eager: true, import: 'default' }
+// );
 
 export function Course({ data }: CourseProps) {
     const [isEnrolled, setIsEnrolled] = useState(false);
     const [loading, setLoading] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
-    const image = images[`../../../assets/course/${data.image}`];
+    //const image = images[`../../../assets/course/${data.image}`];
 
     const handleEnroll = async () => {
         setLoading(true);
@@ -49,11 +49,20 @@ export function Course({ data }: CourseProps) {
         >
             {/* Image */}
             <div className="flex justify-center p-3">
-                <img
-                    className="h-[7rem] w-[12rem] object-cover rounded-md"
-                    src={image}
-                    alt={data.name}
-                />
+                {/*<img*/}
+                {/*    className="h-[7rem] w-[12rem] object-cover rounded-md"*/}
+                {/*    src={image}*/}
+                {/*    alt={data.name}*/}
+                {/*/>*/}
+                {data.image ? (
+                    <img
+                        src={`http://localhost:3000/uploads/course/${data.image}`}
+                        alt={data.description}
+                        className="h-[7rem] w-[12rem] object-cover rounded-md"
+                    />
+                ) : (
+                    "No photo"
+                )}
             </div>
 
             {/* Details */}
@@ -62,7 +71,7 @@ export function Course({ data }: CourseProps) {
                     {data.name}
                 </h3>
                 <p className="text-gray-700 text-sm mt-1 line-clamp-2">
-                    {data.description}
+                {data.description}
                 </p>
 
                 {/* Toggle Button */}

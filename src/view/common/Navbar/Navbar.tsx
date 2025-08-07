@@ -3,9 +3,11 @@ import {Link} from "react-router-dom";
 import icon from '../../../assets/logo/logo.png';
 import {useEffect, useState} from "react";
 import { FaUserCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 
 export function Navbar() {
+    const navigate = useNavigate();
 
     const [username, setUsername] = useState<string | null>(null);
     const [role, setRole] = useState<string | null>(null);
@@ -16,6 +18,14 @@ export function Navbar() {
         const storedRole = localStorage.getItem('role');
         setRole(storedRole);
     }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('role');
+        navigate('/login');
+    };
 
     return (
         <div
@@ -68,12 +78,12 @@ export function Navbar() {
                     <div className="flex items-center space-x-4">
                         <FaUserCircle className="text-white text-3xl" />
                         <p className="text-xl text-blue-800 mr-5 mb-1 font-semibold">{username}</p>
-                        <Link
-                            to="/login"
+                        <button
+                            onClick={handleLogout}
                             className="text-lg font-semibold text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg shadow-md transition duration-200"
                         >
                             Log Out
-                        </Link>
+                        </button>
                     </div>
                 ) : (
                     <Link

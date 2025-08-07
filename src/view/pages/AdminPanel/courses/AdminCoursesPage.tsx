@@ -11,6 +11,12 @@ export function AdminCoursesPage() {
 
     const [editingCourse, setEditingCourse] = useState<CourseData | null>(null);
     const [isCreating, setIsCreating] = useState<boolean>(false);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredCourses = courses.filter((course) =>
+        course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        course.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     useEffect(() => {
         dispatch(getAllCourses());
@@ -57,6 +63,27 @@ export function AdminCoursesPage() {
             alert("Failed to create course");
         }
     };
+    const uploadImage = async (file: File) => {
+        const formData = new FormData();
+        formData.append("photo", file);
+        console.log(formData);
+        try {
+            console.log("Uploading image...");
+            const res = await backendApi.post("/api/upload/course", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            const uploadedFileName = res.data.filename;
+            setEditingCourse((prev) =>
+                prev ? { ...prev, image: `${uploadedFileName}` } : null
+            );
+        } catch (err) {
+            console.error("Image upload failed", err);
+            alert("Image upload failed");
+        }
+    };
+
 
     return (
         <>
@@ -64,9 +91,18 @@ export function AdminCoursesPage() {
                 <h1 className="text-3xl absolute top-45 left-1/2 transform -translate-x-1/2 font-bold text-blue-900 text-center mb-6">
                     Admin Course Management
                 </h1>
+                <div className="flex absolute top-65 justify-center left-1/2 transform -translate-x-1/2 mb-8">
+                    <input
+                        type="text"
+                        placeholder="Search courses by name or description"
+                        className="border border-gray-300 rounded-lg px-4 py-2 w-[600px] shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
 
                 <div className="text-right absolute top-65 left-3/16 transform -translate-x-1/2 mb-4">
-                    <button
+                <button
                         className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
                         onClick={() => {
                             setEditingCourse({
@@ -86,8 +122,9 @@ export function AdminCoursesPage() {
                     </button>
                 </div>
 
-                {courses.length > 0 ? (
-                    <div className="w-[90%] max-w-6xl overflow-x-auto rounded-lg absolute top-80 left-1/2 transform -translate-x-1/2 shadow-md border border-gray-200">
+                {filteredCourses.length > 0 ? (
+                    <div
+                        className="w-[90%] max-w-6xl overflow-x-auto rounded-lg absolute top-80 left-1/2 transform -translate-x-1/2 shadow-md border border-gray-200">
                         <table className="min-w-full bg-white">
                             <thead className="bg-blue-100">
                             <tr>
@@ -97,11 +134,12 @@ export function AdminCoursesPage() {
                                 <th className="py-3 px-4 text-left text-blue-900 font-semibold">Start Date</th>
                                 <th className="py-3 px-4 text-left text-blue-900 font-semibold">End Date</th>
                                 <th className="py-3 px-4 text-left text-blue-900 font-semibold">Price</th>
+                                <th className="py-3 px-4 text-left text-blue-900 font-semibold">Image</th>
                                 <th className="py-3 px-4 text-center text-blue-900 font-semibold">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {courses.map((course) => (
+                            {filteredCourses.map((course) => (
                                 <tr key={course.id} className="border-t hover:bg-blue-50">
                                     <td className="py-3 px-4">{course.id}</td>
                                     <td className="py-3 px-4">{course.name}</td>
@@ -109,6 +147,17 @@ export function AdminCoursesPage() {
                                     <td className="py-3 px-4">{course.course_start_date}</td>
                                     <td className="py-3 px-4">{course.course_end_date}</td>
                                     <td className="py-3 px-4">{course.price}</td>
+                                    <td className="p-3">
+                                        {course.image ? (
+                                            <img
+                                                src={`http://localhost:3000/uploads/course/${course.image}`}
+                                                alt={course.description}
+                                                className="h-12 w-12 object-cover rounded"
+                                            />
+                                        ) : (
+                                            "No photo"
+                                        )}
+                                    </td>
                                     <td className="py-3 px-4 text-center space-x-2">
                                         <button
                                             className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded"
@@ -186,13 +235,27 @@ export function AdminCoursesPage() {
                             />
 
 
-                            <label className="block mb-2">Image URL:</label>
+                            {/*<label className="block mb-2">Image URL:</label>*/}
+                            {/*<input*/}
+                            {/*    type="text"*/}
+                            {/*    value={editingCourse.image}*/}
+                            {/*    onChange={(e) => setEditingCourse({...editingCourse, image: e.target.value})}*/}
+                            {/*    className="w-full p-2 border border-gray-300 rounded mb-4"*/}
+                            {/*/>*/}
+                            <label className="block mb-2">Course Image:</label>
                             <input
-                                type="text"
-                                value={editingCourse.image}
-                                onChange={(e) => setEditingCourse({...editingCourse, image: e.target.value})}
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        uploadImage(file);
+                                        // setEditingCourse({...editingCourse, image: file.name});
+                                    }
+                                }}
                                 className="w-full p-2 border border-gray-300 rounded mb-4"
                             />
+
 
                             <div className="flex justify-end space-x-2">
                                 <button
@@ -243,11 +306,24 @@ export function AdminCoursesPage() {
                                 className="w-full p-2 border border-gray-300 rounded mb-4"
                             />
 
-                            <label className="block mb-2">Image URL:</label>
+                            {/*<label className="block mb-2">Image URL:</label>*/}
+                            {/*<input*/}
+                            {/*    type="text"*/}
+                            {/*    value={editingCourse.image}*/}
+                            {/*    onChange={(e) => setEditingCourse({...editingCourse, image: e.target.value})}*/}
+                            {/*    className="w-full p-2 border border-gray-300 rounded mb-4"*/}
+                            {/*/>*/}
+                            <label className="block mb-2">Course Image:</label>
                             <input
-                                type="text"
-                                value={editingCourse.image}
-                                onChange={(e) => setEditingCourse({...editingCourse, image: e.target.value})}
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        uploadImage(file);
+                                        // setEditingCourse({...editingCourse, image: file.name});
+                                    }
+                                }}
                                 className="w-full p-2 border border-gray-300 rounded mb-4"
                             />
 

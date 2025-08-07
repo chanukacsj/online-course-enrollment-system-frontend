@@ -40,14 +40,14 @@ export function EnrollmentCoursePage() {
                 <h2 className="text-4xl font-extrabold text-blue-900 drop-shadow-md inline-block relative">
                     Your Enrollments
                 </h2>
-                <div className="absolute left-0 right-0 h-0.5 opacity-40 bg-black mt-4 mb-6 top-full mx-auto w-full rounded-full"></div>
+                <div className="absolute left-0 right-0 h-0.25 opacity-40 bg-black mt-4 mb-6 top-full mx-auto w-full rounded-full"></div>
             </div>
 
             {enrollments.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
                     {enrollments.map((enrollment) => (
                         <EnrollmentCourse
-                            key={enrollment.id}
+                            key={enrollment.enrollmentId}
                             enrollment={enrollment}
                             courses={courses}
                         />
