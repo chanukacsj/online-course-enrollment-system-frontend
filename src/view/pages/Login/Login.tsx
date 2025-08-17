@@ -32,6 +32,8 @@ export function Login() {
             localStorage.setItem('userId', id);
             localStorage.setItem('role', role);
             localStorage.setItem('username', username);
+            localStorage.setItem('email', data.email);
+            console.log("email", data.email);
             console.log("User ID:", id);
             console.log("Role:", role);
             console.log("Username:", username);
