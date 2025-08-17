@@ -3,30 +3,24 @@ import {useDispatch, useSelector} from "react-redux";
 import type {AppDispatch, RootState} from "../../../store/store.ts";
 import {getAllCourses} from "../../../slices/courseSlice.ts";
 import {getAllUsers} from "../../../slices/usersSlice.ts";
-import {Course} from "../Course/Course.tsx";
 import type {UserData} from "../../../model/UserData.ts";
 import {backendApi} from "../../../api.ts";
+import {useNavigate} from "react-router-dom";
+
 
 export function Home() {
     const dispatch = useDispatch<AppDispatch>();
-    const {list} = useSelector((state: RootState) => state.course);
     const {list: allUsers} = useSelector((state: RootState) => state.users);
 
     const [role, setRole] = useState<string | null>(null);
     const [users, setUsers] = useState<UserData[]>([]);
     const [editingUser, setEditingUser] = useState<UserData | null>(null);
-    const [searchTerm, setSearchTerm] = useState("");
     const [searchUser, setSearchUser] = useState("");
 
     const filteredUsers = users.filter((user) =>
         user.username.toLowerCase().includes(searchUser.toLowerCase()) ||
         user.email.toLowerCase().includes(searchUser.toLowerCase())
     );
-
-    const filteredCourses = list.filter((course) =>
-            course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            course.description.toLowerCase().includes(searchTerm.toLowerCase())
-        );
 
 
     useEffect(() => {
@@ -76,47 +70,89 @@ export function Home() {
             alert("Failed to delete user.");
         }
     };
+    const navigate = useNavigate();
+
 
     return (
         <>
             {role === "customer" && (
-                <section className="py-12 px-6  min-h-screen">
-                    <div className="relative text-center mb-10">
-                        <h2 className="text-4xl font-extrabold text-blue-900 drop-shadow-md inline-block relative">
-                            Explore Our Courses
-                        </h2>
-                        <div
-                            className="absolute left-0 right-0 h-0.25 opacity-40 bg-black mt-4 mb-6 top-full mx-auto w-full rounded-full"></div>
-                    </div>
-                    <div className="flex justify-center mb-8">
-                        <input
-                            type="text"
-                            placeholder="Search courses by name or description"
-                            className="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                <section className="w-full">
+                    {/* Hero Section with Full-Width Image */}
+                    <div className="relative w-full h-[90vh] flex items-center justify-center">
+                        <img
+                            src="src/assets/course/dashboard.jpg"
+                            alt="Learning background"
+                            className="absolute inset-0 w-full h-full object-cover"
                         />
-                    </div>
-                    {/*{list.length > 0 ? (*/}
-                    {/*    <div*/}
-                    {/*        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">*/}
-                    {/*        {list.map((course) => (*/}
-                    {/*            <Course key={course.id} data={course}/>*/}
-                    {/*        ))}*/}
-                    {/*    </div>*/}
-                    {filteredCourses.length > 0 ? (
-                        <div
-                            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-                            {filteredCourses.map((course) => (
-                                <Course key={course.id} data={course}/>
-                            ))}
+                        {/* Dark overlay */}
+                        <div className="absolute inset-0 bg-black/50"></div>
+
+                        {/* Centered Text */}
+                        <div className="relative z-10 text-center text-white px-4">
+                            <h1 className="text-5xl font-extrabold drop-shadow-lg">
+                                Welcome to Our Learning Platform
+                            </h1>
+                            <p className="mt-4 text-lg max-w-2xl mx-auto">
+                                Discover a wide range of courses designed to help you achieve your goals.
+                                Learn at your own pace with expert instructors and interactive content.
+                            </p>
+
+                            <button
+                                onClick={() => navigate("/userCourses")}
+                                className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow-md transition transform hover:scale-105 text-sm"
+                            >
+                                View Courses
+                            </button>
+
                         </div>
-                    ) : (
-                        <p className="text-center text-gray-500 text-lg mt-10">
-                            No courses available at the moment.
-                        </p>
-                    )}
+                    </div>
+
+                    <div className="mt-16 max-w-6xl mx-auto mb-10 px-6">
+                        <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center">Why Choose Us?</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {/* Card 1 */}
+                            <div className="bg-white rounded-2xl shadow-md p-6 text-center">
+                                <img
+                                    src="src/assets/course/undraw_online-learning_tgmv.png"
+                                    alt="Quality Courses"
+                                    className="w-full h-48 object-cover rounded-xl mb-4"
+                                />
+                                <h3 className="text-xl font-semibold text-blue-700 mb-2">High-Quality Courses</h3>
+                                <p className="text-gray-600">
+                                    Learn from the best instructors with practical, real-world lessons.
+                                </p>
+                            </div>
+
+                            {/* Card 2 */}
+                            <div className="bg-white rounded-2xl shadow-md p-6 text-center">
+                                <img
+                                    src="src/assets/course/undraw_hello_ccwj.png"
+                                    alt="Flexible Learning"
+                                    className="w-full h-48 object-cover rounded-xl mb-4"
+                                />
+                                <h3 className="text-xl font-semibold text-blue-700 mb-2">Learn Anytime</h3>
+                                <p className="text-gray-600">
+                                    Study at your own pace from anywhere with 24/7 access.
+                                </p>
+                            </div>
+
+                            {/* Card 3 */}
+                            <div className="bg-white rounded-2xl shadow-md p-6 text-center">
+                                <img
+                                    src="src/assets/course/undraw_certificate_cqps.png"
+                                    alt="Career Growth"
+                                    className="w-full h-48 object-cover rounded-xl mb-4"
+                                />
+                                <h3 className="text-xl font-semibold text-blue-700 mb-2">Boost Your Career</h3>
+                                <p className="text-gray-600">
+                                    Gain skills that help you advance and stand out in your field.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </section>
+
+
             )}
 
 

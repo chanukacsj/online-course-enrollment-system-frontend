@@ -5,6 +5,7 @@ import {Contact} from "../../pages/Contact/Contact.tsx";
 import {EnrollmentCoursePage} from "../../pages/CourseDetailsPage/EnrollmentCoursePage.tsx";
 import {AdminCoursesPage} from "../../pages/AdminPanel/courses/AdminCoursesPage.tsx";
 import {AdminEnrollmentsPage} from "../../pages/AdminPanel/enrollmentCourses/AdminEnrollmentsPage.tsx";
+import {CoursePage} from "../../pages/Course/CoursePage.tsx";
 
 export function MainContent() {
     return (
@@ -15,6 +16,7 @@ export function MainContent() {
                 <Route path="/contact" element={<Contact/>}/>
                 <Route path="/enrollmentCourse" element={<EnrollmentCoursePage/>}/>
                 <Route path="/courses" element={<AdminCoursesPage/>}/>
+                <Route path="/userCourses" element={<CoursePage/>}/>
                 <Route path="/users" element={<Home/>}/>
                 <Route path="/enrollments" element={<AdminEnrollmentsPage/>}/>
             </Routes>
