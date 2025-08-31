@@ -16,6 +16,13 @@ export function Home() {
     const [users, setUsers] = useState<UserData[]>([]);
     const [editingUser, setEditingUser] = useState<UserData | null>(null);
     const [searchUser, setSearchUser] = useState("");
+    const [current, setCurrent] = useState(0);
+
+    const images = [
+        "src/assets/home/home1.jpeg",
+        "src/assets/home/home2.jpg",
+        "src/assets/home/home3.jpeg"
+    ]
 
     const filteredUsers = users.filter((user) =>
         user.username.toLowerCase().includes(searchUser.toLowerCase()) ||
@@ -28,6 +35,11 @@ export function Home() {
         dispatch(getAllUsers());
         const storedRole = localStorage.getItem("role");
         setRole(storedRole);
+
+        const interval = setInterval(() => {
+            setCurrent((prev) => (prev + 1) % images.length);
+        }, 3000); // 3 seconds per image
+        return () => clearInterval(interval);
     }, [dispatch]);
 
     useEffect(() => {
@@ -77,13 +89,17 @@ export function Home() {
         <>
             {role === "customer" && (
                 <section className="w-full">
-                    {/* Hero Section with Full-Width Image */}
                     <div className="relative w-full h-[90vh] flex items-center justify-center">
-                        <img
-                            src="src/assets/course/dashboard.jpg"
-                            alt="Learning background"
-                            className="absolute inset-0 w-full h-full object-cover"
-                        />
+                        {images.map((img, index) => (
+                            <img
+                                key={index}
+                                src={img}
+                                alt="Learning background"
+                                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                                    index === current ? "opacity-100" : "opacity-0"
+                                }`}
+                            />
+                        ))}
                         {/* Dark overlay */}
                         <div className="absolute inset-0 bg-black/50"></div>
 
@@ -99,7 +115,7 @@ export function Home() {
 
                             <button
                                 onClick={() => navigate("/userCourses")}
-                                className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow-md transition transform hover:scale-105 text-sm"
+                                className="cursor-pointer mt-6 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow-md transition transform hover:scale-105 text-sm"
                             >
                                 View Courses
                             </button>
@@ -111,7 +127,8 @@ export function Home() {
                         <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center">Why Choose Us?</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* Card 1 */}
-                            <div className="bg-white rounded-2xl shadow-md p-6 text-center">
+                            <div
+                                className="cursor-pointer bg-white rounded-2xl shadow-md p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-xl">
                                 <img
                                     src="src/assets/course/undraw_online-learning_tgmv.png"
                                     alt="Quality Courses"
@@ -124,7 +141,8 @@ export function Home() {
                             </div>
 
                             {/* Card 2 */}
-                            <div className="bg-white rounded-2xl shadow-md p-6 text-center">
+                            <div
+                                className="cursor-pointer bg-white rounded-2xl shadow-md p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-xl">
                                 <img
                                     src="src/assets/course/undraw_hello_ccwj.png"
                                     alt="Flexible Learning"
@@ -137,7 +155,8 @@ export function Home() {
                             </div>
 
                             {/* Card 3 */}
-                            <div className="bg-white rounded-2xl shadow-md p-6 text-center">
+                            <div
+                                className="cursor-pointer bg-white rounded-2xl shadow-md p-6 text-center transform transition duration-300 hover:scale-105 hover:shadow-xl">
                                 <img
                                     src="src/assets/course/undraw_certificate_cqps.png"
                                     alt="Career Growth"
@@ -149,6 +168,7 @@ export function Home() {
                                 </p>
                             </div>
                         </div>
+
                     </div>
                 </section>
 
