@@ -56,16 +56,17 @@ export function Course({ data }: CourseProps) {
         }
     };
 
-    const handlePaymentResponse = (status: string | null, orderId: string | null, courseId: string | null) => {
+    const handlePaymentResponse = (status: string | null, orderId: string | null, courseId: string | null,price:string | null) => {
 
         console.log(courseId,"courseId");
         if (status === "SUCCESS" && orderId && !isEnrolled) {
+            console.log("Success",price);
             backendApi
                 .post("api/payment/save", {
                     courseId,
                     userId,
                     paymentDate: new Date(),
-                    paymentAmount: data.price,
+                    paymentAmount: price,
                 })
                 .then(() => handleEnroll())
                 .catch((err) => console.error("Error saving payment:", err));
@@ -80,8 +81,9 @@ export function Course({ data }: CourseProps) {
     const status = queryParams.get("status");
     const orderId = queryParams.get("order_id");
     const courseId = queryParams.get("courseId");
-    if ((status || orderId) && !isEnrolled) {
-        handlePaymentResponse(status, orderId, courseId);
+    const price = queryParams.get("price");
+    if ((status || orderId) && !isEnrolled && price) {
+        handlePaymentResponse(status, orderId, courseId,price );
     }
 
     return (
@@ -149,7 +151,7 @@ export function Course({ data }: CourseProps) {
                                 className="space-y-3 bg-white p-4 rounded-xl shadow-md max-w-md mx-auto"
                             >
                                 <input type="hidden" name="merchant_id" value={merchantID} />
-                                <input type="hidden" name="return_url" value={`http://localhost:5173/userCourses?status=SUCCESS&courseId=${data.id}`} />
+                                <input type="hidden" name="return_url" value={`http://localhost:5173/userCourses?status=SUCCESS&courseId=${data.id}&price=${data.price}`} />
                                 <input type="hidden" name="cancel_url" value="http://localhost:5173/userCourses?status=CANCEL" />
                                 <input type="hidden" name="notify_url" value="http://localhost:5173" />
                                 <input type="hidden" name="order_id" value={data.id} />

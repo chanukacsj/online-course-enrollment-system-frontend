@@ -68,6 +68,9 @@ export function Navbar() {
                             <li className="text-lg text-blue-800 font-semibold px-3 hover:text-blue-600 transition-colors duration-200">
                                 <Link to="/enrollments">Enrollments</Link>
                             </li>
+                            <li className="text-lg text-blue-800 font-semibold px-3 hover:text-blue-600 transition-colors duration-200">
+                                <Link to="/payments">Payment</Link>
+                            </li>
                         </>
                     )}
                 </ul>

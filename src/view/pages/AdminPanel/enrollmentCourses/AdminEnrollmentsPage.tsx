@@ -63,10 +63,12 @@ export function AdminEnrollmentsPage() {
 
     return (
         <div className="max-w-6xl mx-auto mt-10 px-4">
-            <h1 className="text-3xl font-bold absolute top-45 left-1/2 transform -translate-x-1/2 text-blue-900 text-center mb-6">Admin
+            <h1 className="text-3xl font-bold absolute top-38 left-1/2 transform -translate-x-1/2 text-blue-900 text-center mb-6">Admin
                 Enrollment Management</h1>
-            <div className="w-[90%] max-w-6xl overflow-x-auto rounded-lg absolute top-80 left-1/2 transform -translate-x-1/2 shadow-md border border-gray-200">
+            <div className="mt-20 max-w-6xl mx-auto mt-10 overflow-x-auto max-h-[75vh] overflow-y-auto rounded-lg shadow-md border border-gray-200">
+
                 <table className="min-w-full bg-white">
+
                     <thead className="bg-blue-100">
                     <tr>
                         <th className="py-3 px-4 text-left text-blue-900 font-semibold">ID</th>
@@ -107,7 +109,7 @@ export function AdminEnrollmentsPage() {
 
             {editingEnrollment && (
                 <Modal title="Edit Enrollment" onClose={() => setEditingEnrollment(null)}>
-                    <EnrollmentForm
+                <EnrollmentForm
                         enrollment={editingEnrollment}
                         onSave={handleUpdate}
                         onCancel={() => setEditingEnrollment(null)}

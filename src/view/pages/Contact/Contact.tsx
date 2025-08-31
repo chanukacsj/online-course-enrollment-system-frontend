@@ -1,56 +1,48 @@
 import { useForm } from "react-hook-form";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { backendApi } from "../../../api.ts";
-import type { AppDispatch } from "../../../store/store.ts";
-import { useDispatch } from "react-redux";
+
+type FormData = {
+    name: string;
+    email: string;
+    message: string;
+};
 
 export function Contact() {
-    const dispatch = useDispatch<AppDispatch>();
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<FormData>();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
 
-    type FormData = {
-        name: string;
-        email: string;
-        message: string;
-    };
+    const onSubmit = async (data: FormData) => {
 
-    const onSubmit = (data: FormData) => {
-        console.log(data);
-        dispatch(saveContact(data))
-            .unwrap()
-            .then((res) => {
-                alert("Contact message sent successfully.");
-                console.log(res);
-            })
-            .catch((err) => {
+        const formData = { ...data, access_key: "e7a2ab57-fdb8-4f96-ad27-00a99f71cef6" };
+
+        try {
+            const res = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify(formData),
+            }).then(res => res.json());
+
+            if (res.success) {
+                alert(res.message);
+                reset(); // clear the form
+            } else {
                 alert("Failed to send message.");
-                console.error(err);
-            });
-    };
-
-    const saveContact = createAsyncThunk(
-        "contact/saveContact",
-        async (data: FormData) => {
-            const response = await backendApi.post("api/contacts/save", data);
-            console.log(response);
-            return response.data;
+            }
+        } catch (err) {
+            console.error(err);
+            alert("An error occurred while sending the message.");
         }
-    );
+    };
 
     return (
         <div className="w-full min-h-screen flex flex-col items-center justify-center px-4 py-10 bg-gradient-to-br from-blue-50 via-white to-blue-100">
-            {/* Title */}
             <div className="text-center mb-8">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-blue-900 drop-shadow-md">
                     Contact Us
                 </h2>
             </div>
 
-            {/* Form */}
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="w-full max-w-md sm:max-w-lg bg-white p-6 sm:p-8 rounded-xl shadow-md border border-blue-200 hover:bg-blue-50 transition duration-300 ease-in-out"
@@ -103,10 +95,10 @@ export function Contact() {
                     id="message"
                     rows={4}
                     className="w-full p-3 border border-gray-300 rounded text-base focus:ring-2 focus:ring-blue-400 outline-none"
-                    {...register("message", { required: true })}
+                    {...register("message", { required: "Message is required" })}
                 />
                 {errors.message && (
-                    <span className="text-red-600 text-sm">Message is required</span>
+                    <span className="text-red-600 text-sm">{errors.message.message}</span>
                 )}
 
                 {/* Button */}

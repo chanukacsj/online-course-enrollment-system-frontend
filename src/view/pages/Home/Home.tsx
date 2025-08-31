@@ -38,7 +38,7 @@ export function Home() {
 
         const interval = setInterval(() => {
             setCurrent((prev) => (prev + 1) % images.length);
-        }, 3000); // 3 seconds per image
+        }, 3000);
         return () => clearInterval(interval);
     }, [dispatch]);
 
@@ -194,7 +194,7 @@ export function Home() {
 
                     {filteredUsers.length > 0 ? (
                         <div
-                            className="w-[90%] max-w-6xl overflow-x-auto rounded-lg absolute top-80 left-1/2 transform -translate-x-1/2 shadow-md border border-gray-200">
+                            className="w-[90%] max-w-6xl max-h-[70vh] overflow-y-auto overflow-x-auto rounded-lg absolute top-80 left-1/2 transform -translate-x-1/2 shadow-md border border-gray-200">
                             <table className="min-w-full bg-white">
                                 <thead className="bg-blue-100">
                                 <tr>
