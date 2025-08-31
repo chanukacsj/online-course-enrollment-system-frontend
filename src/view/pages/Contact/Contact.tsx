@@ -1,13 +1,16 @@
-import {useForm} from "react-hook-form";
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {backendApi} from "../../../api.ts";
-import type {AppDispatch} from "../../../store/store.ts";
-import {useDispatch} from "react-redux";
+import { useForm } from "react-hook-form";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { backendApi } from "../../../api.ts";
+import type { AppDispatch } from "../../../store/store.ts";
+import { useDispatch } from "react-redux";
 
 export function Contact() {
-
     const dispatch = useDispatch<AppDispatch>();
-    const {register, handleSubmit, formState: {errors}} = useForm<FormData>();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormData>();
 
     type FormData = {
         name: string;
@@ -30,33 +33,36 @@ export function Contact() {
     };
 
     const saveContact = createAsyncThunk(
-        'contact/saveContact',
+        "contact/saveContact",
         async (data: FormData) => {
-            const response = await backendApi.post('api/contacts/save', data)
-            console.log(response)
-            return response.data
-
+            const response = await backendApi.post("api/contacts/save", data);
+            console.log(response);
+            return response.data;
         }
-    )
+    );
 
     return (
-
-        <div className="w-full h-screen flex justify-center items-center relative ">
-            <div className="absolute top-13 text-center mb-10">
-                <h2 className="text-4xl font-extrabold text-blue-900 drop-shadow-md inline-block ">
+        <div className="w-full min-h-screen flex flex-col items-center justify-center px-4 py-10 bg-gradient-to-br from-blue-50 via-white to-blue-100">
+            {/* Title */}
+            <div className="text-center mb-8">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-blue-900 drop-shadow-md">
                     Contact Us
                 </h2>
             </div>
+
+            {/* Form */}
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md flex flex-col gap-4 shadow-lg rounded-lg border border-blue-300
-                 hover:bg-blue-100 transition duration-300 ease-in-out"
+                className="w-full max-w-md sm:max-w-lg bg-white p-6 sm:p-8 rounded-xl shadow-md border border-blue-200 hover:bg-blue-50 transition duration-300 ease-in-out"
             >
-                <label htmlFor="name" className="font-semibold">Name:</label>
+                {/* Name */}
+                <label htmlFor="name" className="font-semibold block mb-1">
+                    Name:
+                </label>
                 <input
                     id="name"
                     type="text"
-                    className="p-3 border border-gray-300 rounded text-base"
+                    className="w-full p-3 border border-gray-300 rounded text-base focus:ring-2 focus:ring-blue-400 outline-none"
                     {...register("name", {
                         required: "Name is required",
                         pattern: {
@@ -65,13 +71,18 @@ export function Contact() {
                         },
                     })}
                 />
-                {errors.name && <span className="text-red-600 text-sm">{errors.name.message}</span>}
+                {errors.name && (
+                    <span className="text-red-600 text-sm">{errors.name.message}</span>
+                )}
 
-                <label htmlFor="email" className="font-semibold">Email:</label>
+                {/* Email */}
+                <label htmlFor="email" className="font-semibold block mt-4 mb-1">
+                    Email:
+                </label>
                 <input
                     id="email"
                     type="email"
-                    className="p-3 border border-gray-300 rounded text-base"
+                    className="w-full p-3 border border-gray-300 rounded text-base focus:ring-2 focus:ring-blue-400 outline-none"
                     {...register("email", {
                         required: "Email is required",
                         pattern: {
@@ -80,20 +91,28 @@ export function Contact() {
                         },
                     })}
                 />
-                {errors.email && <span className="text-red-600 text-sm">{errors.email.message}</span>}
+                {errors.email && (
+                    <span className="text-red-600 text-sm">{errors.email.message}</span>
+                )}
 
-                <label htmlFor="message" className="font-semibold">Message:</label>
+                {/* Message */}
+                <label htmlFor="message" className="font-semibold block mt-4 mb-1">
+                    Message:
+                </label>
                 <textarea
                     id="message"
                     rows={4}
-                    className="p-3 border border-gray-300 rounded text-base"
-                    {...register("message", {required: true})}
+                    className="w-full p-3 border border-gray-300 rounded text-base focus:ring-2 focus:ring-blue-400 outline-none"
+                    {...register("message", { required: true })}
                 />
-                {errors.message && <span className="text-red-600 text-sm">Message is required</span>}
+                {errors.message && (
+                    <span className="text-red-600 text-sm">Message is required</span>
+                )}
 
+                {/* Button */}
                 <button
                     type="submit"
-                    className="p-3 bg-blue-600 hover:bg-blue-700 font-semibold text-white rounded transition-colors duration-300"
+                    className="w-full mt-6 p-3 bg-blue-600 hover:bg-blue-700 font-semibold text-white rounded-lg shadow-md transition-colors duration-300"
                 >
                     Send
                 </button>
